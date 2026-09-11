@@ -1,0 +1,1009 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CocoGuard AI</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, sans-serif;
+}
+
+body{
+    background:linear-gradient(135deg,#12051f,#25083d,#160525);
+    color:white;
+    min-height:100vh;
+}
+
+nav{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:18px 7%;
+    background:rgba(15,5,25,.8);
+    position:sticky;
+    top:0;
+    z-index:10;
+    backdrop-filter:blur(12px);
+}
+
+.logo{
+    font-size:24px;
+    font-weight:bold;
+    color:#d58cff;
+}
+
+.navlinks{
+    display:flex;
+    gap:25px;
+    align-items:center;
+}
+
+.navlinks button{
+    background:none;
+    border:none;
+    color:white;
+    cursor:pointer;
+    font-size:15px;
+    transition:.3s;
+}
+
+.navlinks button:hover{
+    color:#d58cff;
+    transform:scale(1.08);
+}
+
+select{
+    background:#29103d;
+    color:white;
+    border:1px solid #9d4edd;
+    padding:9px;
+    border-radius:10px;
+}
+
+.container{
+    width:86%;
+    max-width:1200px;
+    margin:auto;
+}
+
+.page{
+    display:none;
+}
+
+.page.active{
+    display:block;
+}
+
+/* HOME */
+
+.hero{
+    min-height:75vh;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:40px;
+}
+
+.hero-text{
+    max-width:600px;
+}
+
+.hero h1{
+    font-size:55px;
+    line-height:1.1;
+    margin-bottom:20px;
+}
+
+.hero h1 span{
+    color:#c77dff;
+}
+
+.hero p{
+    color:#d5c8df;
+    font-size:18px;
+    line-height:1.7;
+    margin-bottom:30px;
+}
+
+.main-btn{
+    padding:15px 25px;
+    border:none;
+    border-radius:14px;
+    background:linear-gradient(90deg,#7b2cbf,#c77dff);
+    color:white;
+    font-weight:bold;
+    cursor:pointer;
+    box-shadow:0 0 20px rgba(199,125,255,.3);
+    transition:.25s;
+}
+
+.main-btn:hover{
+    transform:scale(1.05);
+    box-shadow:0 0 35px rgba(199,125,255,.7);
+}
+
+.hero-card{
+    width:330px;
+    height:330px;
+    border-radius:30px;
+    background:linear-gradient(145deg,#351052,#1c092c);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-direction:column;
+    box-shadow:0 0 50px rgba(157,78,221,.3);
+    border:1px solid #7030a0;
+}
+
+.tree{
+    font-size:120px;
+}
+
+.hero-card p{
+    margin:0;
+    font-size:16px;
+}
+
+/* SCAN */
+
+.section{
+    padding:60px 0;
+}
+
+.section-title{
+    font-size:38px;
+    margin-bottom:10px;
+}
+
+.section-subtitle{
+    color:#cfc0d8;
+    margin-bottom:30px;
+}
+
+.upload-box{
+    border:2px dashed #8e44ad;
+    border-radius:20px;
+    padding:35px;
+    text-align:center;
+    background:rgba(43,15,61,.6);
+    cursor:pointer;
+    transition:.3s;
+}
+
+.upload-box:hover{
+    border-color:#d58cff;
+    box-shadow:0 0 30px rgba(199,125,255,.25);
+}
+
+.upload-box input{
+    display:none;
+}
+
+.upload-icon{
+    font-size:55px;
+    margin-bottom:15px;
+}
+
+.preview{
+    display:none;
+    margin-top:25px;
+    text-align:center;
+}
+
+.preview img{
+    max-width:350px;
+    max-height:350px;
+    border-radius:18px;
+    border:2px solid #a855f7;
+}
+
+.analyze-btn{
+    margin-top:20px;
+}
+
+.loading{
+    display:none;
+    text-align:center;
+    margin-top:30px;
+}
+
+.loader{
+    width:45px;
+    height:45px;
+    border:4px solid #49215f;
+    border-top:4px solid #d58cff;
+    border-radius:50%;
+    animation:spin 1s linear infinite;
+    margin:auto;
+}
+
+@keyframes spin{
+    to{transform:rotate(360deg);}
+}
+
+.result{
+    display:none;
+    margin-top:30px;
+    padding:30px;
+    border-radius:20px;
+    background:linear-gradient(145deg,#351052,#1b0829);
+    border:1px solid #8e44ad;
+}
+
+.result h3{
+    color:#d58cff;
+    margin-bottom:15px;
+}
+
+.result .disease{
+    font-size:28px;
+    font-weight:bold;
+    margin-bottom:15px;
+}
+
+.badge{
+    display:inline-block;
+    padding:8px 14px;
+    border-radius:20px;
+    background:#5b247a;
+    margin:5px;
+}
+
+/* DASHBOARD */
+
+.dashboard-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:18px;
+    margin:30px 0;
+}
+
+.stat-card{
+    background:linear-gradient(145deg,#32104a,#1c0829);
+    padding:25px;
+    border-radius:20px;
+    border:1px solid #66358a;
+    transition:.3s;
+}
+
+.stat-card:hover{
+    transform:translateY(-5px);
+    box-shadow:0 0 25px rgba(199,125,255,.25);
+}
+
+.stat-card .number{
+    font-size:35px;
+    font-weight:bold;
+    margin:10px 0;
+    color:#d58cff;
+}
+
+.sensor-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:18px;
+}
+
+.sensor-card{
+    padding:25px;
+    border-radius:20px;
+    background:rgba(45,15,65,.8);
+    border:1px solid #7540a0;
+}
+
+.sensor-icon{
+    font-size:35px;
+}
+
+.sensor-value{
+    font-size:32px;
+    font-weight:bold;
+    margin:12px 0;
+    color:#d58cff;
+}
+
+.sensor-status{
+    color:#bfa9cc;
+    font-size:14px;
+}
+
+.priority{
+    margin-top:35px;
+    background:rgba(40,12,58,.8);
+    padding:25px;
+    border-radius:20px;
+    border:1px solid #66358a;
+}
+
+.tree-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:18px 5px;
+    border-bottom:1px solid #452052;
+}
+
+.risk{
+    padding:7px 13px;
+    border-radius:15px;
+    font-size:13px;
+}
+
+.high{
+    background:#7f1d1d;
+}
+
+.medium{
+    background:#704214;
+}
+
+.low{
+    background:#245c3a;
+}
+
+.prototype-note{
+    margin-top:20px;
+    color:#a995b5;
+    font-size:13px;
+}
+
+/* MOBILE */
+
+@media(max-width:800px){
+
+    nav{
+        padding:15px 4%;
+    }
+
+    .navlinks{
+        gap:10px;
+    }
+
+    .navlinks button{
+        font-size:12px;
+    }
+
+    .hero{
+        flex-direction:column;
+        text-align:center;
+        padding:50px 0;
+    }
+
+    .hero h1{
+        font-size:40px;
+    }
+
+    .hero-card{
+        width:280px;
+        height:280px;
+    }
+
+    .dashboard-grid,
+    .sensor-grid{
+        grid-template-columns:repeat(2,1fr);
+    }
+}
+
+@media(max-width:500px){
+
+    .dashboard-grid,
+    .sensor-grid{
+        grid-template-columns:1fr;
+    }
+
+    .tree-row{
+        gap:10px;
+        flex-direction:column;
+        align-items:flex-start;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<nav>
+    <div class="logo">🌴 CocoGuard AI</div>
+
+    <div class="navlinks">
+        <button onclick="showPage('home')" data-key="home">Home</button>
+        <button onclick="showPage('scan')" data-key="scan">Scan</button>
+        <button onclick="showPage('dashboard')" data-key="dashboard">Dashboard</button>
+
+        <select id="language" onchange="changeLanguage()">
+            <option value="en">English</option>
+            <option value="ta">தமிழ்</option>
+            <option value="te">తెలుగు</option>
+            <option value="ml">മലയാളം</option>
+            <option value="kn">ಕನ್ನಡ</option>
+            <option value="hi">हिन्दी</option>
+            <option value="bn">বাংলা</option>
+            <option value="mr">मराठी</option>
+        </select>
+    </div>
+</nav>
+
+
+<!-- HOME -->
+
+<div id="home" class="page active">
+<div class="container">
+
+<section class="hero">
+
+<div class="hero-text">
+<h1>
+    Protect Your <span>Coconut Trees.</span>
+</h1>
+
+<p data-key="description">
+    AI-powered coconut tree monitoring that combines image screening
+    with smart sensor monitoring to help farmers identify trees
+    that need attention.
+</p>
+
+<button class="main-btn" onclick="showPage('scan')" data-key="scanButton">
+    📷 Scan a Coconut Tree
+</button>
+
+</div>
+
+<div class="hero-card">
+<div class="tree">🌴</div>
+<p>AI + Smart Sensors</p>
+</div>
+
+</section>
+
+</div>
+</div>
+
+
+<!-- SCAN -->
+
+<div id="scan" class="page">
+<div class="container">
+
+<section class="section">
+
+<h2 class="section-title" data-key="scanTitle">
+    AI Coconut Tree Scanner
+</h2>
+
+<p class="section-subtitle" data-key="scanSubtitle">
+    Upload or capture a coconut tree image for AI screening.
+</p>
+
+<label class="upload-box">
+
+<input
+type="file"
+id="imageInput"
+accept="image/*"
+capture="environment"
+>
+
+<div class="upload-icon">📷</div>
+
+<h3 data-key="uploadTitle">
+    Upload / Capture Image
+</h3>
+
+<p data-key="uploadText">
+    Tap here to select a coconut tree image
+</p>
+
+</label>
+
+
+<div class="preview" id="preview">
+<img id="previewImage">
+
+<br>
+
+<button class="main-btn analyze-btn"
+onclick="analyzeImage()"
+data-key="analyzeButton">
+
+🔍 Analyze with AI
+
+</button>
+</div>
+
+
+<div class="loading" id="loading">
+
+<div class="loader"></div>
+
+<p style="margin-top:15px;" data-key="analyzing">
+AI is analyzing the image...
+</p>
+
+</div>
+
+
+<div class="result" id="result">
+
+<h3>AI SCREENING RESULT</h3>
+
+<div class="disease">
+🪲 Vandu Kadi Suspected
+</div>
+
+<span class="badge">
+AI Confidence: 87%
+</span>
+
+<span class="badge">
+Priority: Medium
+</span>
+
+<br><br>
+
+<h3>Recommended Action</h3>
+
+<p>
+Inspect the affected coconut tree and monitor nearby trees.
+</p>
+
+<p class="prototype-note">
+Prototype demo result — real AI model will be connected later.
+</p>
+
+</div>
+
+</section>
+
+</div>
+</div>
+
+
+<!-- DASHBOARD -->
+
+<div id="dashboard" class="page">
+
+<div class="container">
+
+<section class="section">
+
+<h2 class="section-title" data-key="dashboardTitle">
+    🌴 Farm Health Monitor
+</h2>
+
+<p class="section-subtitle" data-key="dashboardSubtitle">
+    Monitor coconut trees using image screening and environmental sensors.
+</p>
+
+
+<!-- TREE STATS -->
+
+<div class="dashboard-grid">
+
+<div class="stat-card">
+<div>🌴 Total Trees</div>
+<div class="number">120</div>
+<div>Farm trees monitored</div>
+</div>
+
+<div class="stat-card">
+<div>💚 Healthy</div>
+<div class="number">92</div>
+<div>Normal condition</div>
+</div>
+
+<div class="stat-card">
+<div>⚠️ Need Attention</div>
+<div class="number">21</div>
+<div>Check recommended</div>
+</div>
+
+<div class="stat-card">
+<div>🚨 High Risk</div>
+<div class="number">7</div>
+<div>Priority inspection</div>
+</div>
+
+</div>
+
+
+<!-- SENSORS -->
+
+<h2 style="margin:35px 0 20px;" data-key="sensorTitle">
+    📡 Live Sensor Data
+</h2>
+
+<div class="sensor-grid">
+
+<div class="sensor-card">
+<div class="sensor-icon">🌡️</div>
+<div>Temperature</div>
+<div class="sensor-value">
+<span id="temperature">29</span>°C
+</div>
+<div class="sensor-status">Live monitoring</div>
+</div>
+
+
+<div class="sensor-card">
+<div class="sensor-icon">💧</div>
+<div>Humidity</div>
+<div class="sensor-value">
+<span id="humidity">82</span>%
+</div>
+<div class="sensor-status">Live monitoring</div>
+</div>
+
+
+<div class="sensor-card">
+<div class="sensor-icon">🌱</div>
+<div>Soil Moisture</div>
+<div class="sensor-value">
+<span id="soil">68</span>%
+</div>
+<div class="sensor-status">Live monitoring</div>
+</div>
+
+
+<div class="sensor-card">
+<div class="sensor-icon">🌧️</div>
+<div>Rain / Wetness</div>
+<div class="sensor-value">
+<span id="rain">34</span>%
+</div>
+<div class="sensor-status">Live monitoring</div>
+</div>
+
+</div>
+
+
+<!-- PRIORITY TREES -->
+
+<div class="priority">
+
+<h2 data-key="priorityTitle">
+    🚨 Priority Trees
+</h2>
+
+<br>
+
+<div class="tree-row">
+
+<div>
+<strong>Tree #24</strong>
+<br>
+Vandu Kadi Suspected
+</div>
+
+<div>
+<span class="risk high">HIGH RISK</span>
+</div>
+
+</div>
+
+
+<div class="tree-row">
+
+<div>
+<strong>Tree #51</strong>
+<br>
+Neervaditha Suspected
+</div>
+
+<div>
+<span class="risk medium">MEDIUM RISK</span>
+</div>
+
+</div>
+
+
+<div class="tree-row">
+
+<div>
+<strong>Tree #78</strong>
+<br>
+White Poochu Suspected
+</div>
+
+<div>
+<span class="risk medium">MEDIUM RISK</span>
+</div>
+
+</div>
+
+</div>
+
+
+<p class="prototype-note" data-key="prototypeNote">
+    Prototype mode: sensor values are simulated for demonstration.
+    Image AI screens visible symptoms, while sensors monitor environmental conditions.
+</p>
+
+</section>
+
+</div>
+</div>
+
+
+<script>
+
+/* =========================
+   TRANSLATIONS
+========================= */
+
+const translations = {
+
+en:{
+home:"Home",
+scan:"Scan",
+dashboard:"Dashboard",
+description:"AI-powered coconut tree monitoring that combines image screening with smart sensor monitoring to help farmers identify trees that need attention.",
+scanButton:"📷 Scan a Coconut Tree",
+scanTitle:"AI Coconut Tree Scanner",
+scanSubtitle:"Upload or capture a coconut tree image for AI screening.",
+uploadTitle:"Upload / Capture Image",
+uploadText:"Tap here to select a coconut tree image",
+analyzeButton:"🔍 Analyze with AI",
+analyzing:"AI is analyzing the image...",
+dashboardTitle:"🌴 Farm Health Monitor",
+dashboardSubtitle:"Monitor coconut trees using image screening and environmental sensors.",
+sensorTitle:"📡 Live Sensor Data",
+priorityTitle:"🚨 Priority Trees",
+prototypeNote:"Prototype mode: sensor values are simulated for demonstration. Image AI screens visible symptoms, while sensors monitor environmental conditions."
+},
+
+ta:{
+home:"முகப்பு",
+scan:"ஸ்கேன்",
+dashboard:"டாஷ்போர்டு",
+description:"AI image screening மற்றும் smart sensors மூலம் தென்னை மரங்களை கண்காணித்து கவனம் தேவைப்படும் மரங்களை விவசாயிகள் கண்டறிய உதவும் அமைப்பு.",
+scanButton:"📷 தென்னை மரத்தை ஸ்கேன் செய்",
+scanTitle:"AI தென்னை மர ஸ்கேனர்",
+scanSubtitle:"AI screening செய்ய தென்னை மரத்தின் புகைப்படத்தை upload அல்லது capture செய்யவும்.",
+uploadTitle:"புகைப்படம் Upload / Capture",
+uploadText:"தென்னை மரத்தின் புகைப்படத்தை தேர்வு செய்ய இங்கே tap செய்யவும்",
+analyzeButton:"🔍 AI மூலம் Analyze செய்",
+analyzing:"AI புகைப்படத்தை ஆய்வு செய்கிறது...",
+dashboardTitle:"🌴 பண்ணை கண்காணிப்பு",
+dashboardSubtitle:"Image screening மற்றும் environmental sensors மூலம் தென்னை மரங்களை கண்காணிக்கவும்.",
+sensorTitle:"📡 நேரடி Sensor தகவல்",
+priorityTitle:"🚨 முக்கியமாக கவனிக்க வேண்டிய மரங்கள்",
+prototypeNote:"Prototype mode: sensor values demonstration-க்காக simulated values ஆகும். Image AI visible symptoms-ஐ screen செய்கிறது; sensors environmental conditions-ஐ monitor செய்கின்றன."
+},
+
+te:{
+home:"హోమ్",
+scan:"స్కాన్",
+dashboard:"డ్యాష్‌బోర్డ్",
+description:"AI image screening మరియు smart sensors ద్వారా కొబ్బరి చెట్లను పర్యవేక్షించే వ్యవస్థ.",
+scanButton:"📷 కొబ్బరి చెట్టును స్కాన్ చేయండి",
+scanTitle:"AI కొబ్బరి చెట్టు స్కానర్",
+scanSubtitle:"AI screening కోసం కొబ్బరి చెట్టు చిత్రాన్ని upload లేదా capture చేయండి.",
+uploadTitle:"చిత్రాన్ని Upload / Capture చేయండి",
+uploadText:"కొబ్బరి చెట్టు చిత్రాన్ని ఎంచుకోవడానికి ఇక్కడ tap చేయండి",
+analyzeButton:"🔍 AI తో Analyze చేయండి",
+analyzing:"AI చిత్రాన్ని విశ్లేషిస్తోంది...",
+dashboardTitle:"🌴 Farm Health Monitor",
+dashboardSubtitle:"Image screening మరియు environmental sensors ద్వారా చెట్లను పర్యవేక్షించండి.",
+sensorTitle:"📡 Live Sensor Data",
+priorityTitle:"🚨 Priority Trees",
+prototypeNote:"Prototype mode: sensor values demonstration కోసం simulated values. Image AI visible symptoms ను screen చేస్తుంది; sensors environmental conditions ను monitor చేస్తాయి."
+},
+
+ml:{
+home:"ഹോം",
+scan:"സ്കാൻ",
+dashboard:"ഡാഷ്ബോർഡ്",
+description:"AI image screening, smart sensors എന്നിവ ഉപയോഗിച്ച് തെങ്ങുകൾ നിരീക്ഷിക്കുന്ന സംവിധാനം.",
+scanButton:"📷 തെങ്ങ് സ്കാൻ ചെയ്യുക",
+scanTitle:"AI തെങ്ങ് സ്കാനർ",
+scanSubtitle:"AI screening ചെയ്യാൻ തെങ്ങിന്റെ ചിത്രം upload അല്ലെങ്കിൽ capture ചെയ്യുക.",
+uploadTitle:"ചിത്രം Upload / Capture ചെയ്യുക",
+uploadText:"തെങ്ങിന്റെ ചിത്രം തിരഞ്ഞെടുക്കാൻ ഇവിടെ tap ചെയ്യുക",
+analyzeButton:"🔍 AI ഉപയോഗിച്ച് Analyze ചെയ്യുക",
+analyzing:"AI ചിത്രം പരിശോധിക്കുന്നു...",
+dashboardTitle:"🌴 Farm Health Monitor",
+dashboardSubtitle:"Image screening, environmental sensors എന്നിവ ഉപയോഗിച്ച് തെങ്ങുകൾ നിരീക്ഷിക്കുക.",
+sensorTitle:"📡 Live Sensor Data",
+priorityTitle:"🚨 Priority Trees",
+prototypeNote:"Prototype mode: sensor values demonstration-നായി simulated ആണ്. Image AI visible symptoms screen ചെയ്യുന്നു; sensors environmental conditions monitor ചെയ്യുന്നു."
+},
+
+kn:{
+home:"ಮುಖಪುಟ",
+scan:"ಸ್ಕ್ಯಾನ್",
+dashboard:"ಡ್ಯಾಶ್‌ಬೋರ್ಡ್",
+description:"AI image screening ಮತ್ತು smart sensors ಬಳಸಿ ತೆಂಗಿನ ಮರಗಳನ್ನು ಮೇಲ್ವಿಚಾರಣೆ ಮಾಡುವ ವ್ಯವಸ್ಥೆ.",
+scanButton:"📷 ತೆಂಗಿನ ಮರವನ್ನು ಸ್ಕ್ಯಾನ್ ಮಾಡಿ",
+scanTitle:"AI ತೆಂಗಿನ ಮರ ಸ್ಕ್ಯಾನರ್",
+scanSubtitle:"AI screening ಗಾಗಿ ತೆಂಗಿನ ಮರದ ಚಿತ್ರವನ್ನು upload ಅಥವಾ capture ಮಾಡಿ.",
+uploadTitle:"ಚಿತ್ರ Upload / Capture ಮಾಡಿ",
+uploadText:"ತೆಂಗಿನ ಮರದ ಚಿತ್ರವನ್ನು ಆಯ್ಕೆ ಮಾಡಲು ಇಲ್ಲಿ tap ಮಾಡಿ",
+analyzeButton:"🔍 AI ಮೂಲಕ Analyze ಮಾಡಿ",
+analyzing:"AI ಚಿತ್ರವನ್ನು ಪರಿಶೀಲಿಸುತ್ತಿದೆ...",
+dashboardTitle:"🌴 Farm Health Monitor",
+dashboardSubtitle:"Image screening ಮತ್ತು environmental sensors ಬಳಸಿ ಮರಗಳನ್ನು ಮೇಲ್ವಿಚಾರಣೆ ಮಾಡಿ.",
+sensorTitle:"📡 Live Sensor Data",
+priorityTitle:"🚨 Priority Trees",
+prototypeNote:"Prototype mode: sensor values demonstration ಗಾಗಿ simulated ಆಗಿವೆ."
+},
+
+hi:{
+home:"होम",
+scan:"स्कैन",
+dashboard:"डैशबोर्ड",
+description:"AI image screening और smart sensors की मदद से नारियल के पेड़ों की निगरानी करने वाली प्रणाली।",
+scanButton:"📷 नारियल के पेड़ को स्कैन करें",
+scanTitle:"AI नारियल पेड़ स्कैनर",
+scanSubtitle:"AI screening के लिए नारियल के पेड़ की तस्वीर upload या capture करें।",
+uploadTitle:"तस्वीर Upload / Capture करें",
+uploadText:"नारियल के पेड़ की तस्वीर चुनने के लिए यहाँ tap करें",
+analyzeButton:"🔍 AI से Analyze करें",
+analyzing:"AI तस्वीर का विश्लेषण कर रहा है...",
+dashboardTitle:"🌴 Farm Health Monitor",
+dashboardSubtitle:"Image screening और environmental sensors से पेड़ों की निगरानी करें।",
+sensorTitle:"📡 Live Sensor Data",
+priorityTitle:"🚨 Priority Trees",
+prototypeNote:"Prototype mode: sensor values demonstration के लिए simulated हैं।"
+},
+
+bn:{
+home:"হোম",
+scan:"স্ক্যান",
+dashboard:"ড্যাশবোর্ড",
+description:"AI image screening এবং smart sensors ব্যবহার করে নারকেল গাছ পর্যবেক্ষণ করার ব্যবস্থা।",
+scanButton:"📷 নারকেল গাছ স্ক্যান করুন",
+scanTitle:"AI নারকেল গাছ স্ক্যানার",
+scanSubtitle:"AI screening-এর জন্য নারকেল গাছের ছবি upload বা capture করুন।",
+uploadTitle:"ছবি Upload / Capture করুন",
+uploadText:"নারকেল গাছের ছবি নির্বাচন করতে এখানে tap করুন",
+analyzeButton:"🔍 AI দিয়ে Analyze করুন",
+analyzing:"AI ছবিটি বিশ্লেষণ করছে...",
+dashboardTitle:"🌴 Farm Health Monitor",
+dashboardSubtitle:"Image screening এবং environmental sensors ব্যবহার করে গাছ পর্যবেক্ষণ করুন।",
+sensorTitle:"📡 Live Sensor Data",
+priorityTitle:"🚨 Priority Trees",
+prototypeNote:"Prototype mode: sensor values demonstration-এর জন্য simulated।"
+},
+
+mr:{
+home:"होम",
+scan:"स्कॅन",
+dashboard:"डॅशबोर्ड",
+description:"AI image screening आणि smart sensors वापरून नारळाच्या झाडांचे निरीक्षण करणारी प्रणाली.",
+scanButton:"📷 नारळाचे झाड स्कॅन करा",
+scanTitle:"AI नारळ झाड स्कॅनर",
+scanSubtitle:"AI screening साठी नारळाच्या झाडाचा फोटो upload किंवा capture करा.",
+uploadTitle:"फोटो Upload / Capture करा",
+uploadText:"नारळाच्या झाडाचा फोटो निवडण्यासाठी येथे tap करा",
+analyzeButton:"🔍 AI ने Analyze करा",
+analyzing:"AI फोटोचे विश्लेषण करत आहे...",
+dashboardTitle:"🌴 Farm Health Monitor",
+dashboardSubtitle:"Image screening आणि environmental sensors वापरून झाडांचे निरीक्षण करा.",
+sensorTitle:"📡 Live Sensor Data",
+priorityTitle:"🚨 Priority Trees",
+prototypeNote:"Prototype mode: sensor values demonstration साठी simulated आहेत."
+}
+
+};
+
+
+/* =========================
+   PAGE NAVIGATION
+========================= */
+
+function showPage(page){
+
+document.querySelectorAll(".page").forEach(p=>{
+    p.classList.remove("active");
+});
+
+document.getElementById(page).classList.add("active");
+
+window.scrollTo({
+    top:0,
+    behavior:"smooth"
+});
+
+}
+
+
+/* =========================
+   LANGUAGE
+========================= */
+
+function changeLanguage(){
+
+const lang=document.getElementById("language").value;
+const data=translations[lang];
+
+document.querySelectorAll("[data-key]").forEach(element=>{
+
+const key=element.getAttribute("data-key");
+
+if(data[key]){
+    element.textContent=data[key];
+}
+
+});
+
+}
+
+
+/* =========================
+   IMAGE PREVIEW
+========================= */
+
+document.getElementById("imageInput").addEventListener("change",function(){
+
+const file=this.files[0];
+
+if(!file) return;
+
+const imageURL=URL.createObjectURL(file);
+
+document.getElementById("previewImage").src=imageURL;
+
+document.getElementById("preview").style.display="block";
+
+document.getElementById("result").style.display="none";
+
+});
+
+
+/* =========================
+   AI ANALYSIS DEMO
+========================= */
+
+function analyzeImage(){
+
+document.getElementById("loading").style.display="block";
+
+document.getElementById("result").style.display="none";
+
+setTimeout(()=>{
+
+document.getElementById("loading").style.display="none";
+
+document.getElementById("result").style.display="block";
+
+},2500);
+
+}
+
+
+/* =========================
+   SIMULATED SENSOR DATA
+========================= */
+
+function updateSensors(){
+
+let temperature =
+28 + Math.floor(Math.random()*4);
+
+let humidity =
+78 + Math.floor(Math.random()*8);
+
+let soil =
+62 + Math.floor(Math.random()*12);
+
+let rain =
+25 + Math.floor(Math.random()*20);
+
+document.getElementById("temperature").textContent=temperature;
+document.getElementById("humidity").textContent=humidity;
+document.getElementById("soil").textContent=soil;
+document.getElementById("rain").textContent=rain;
+
+}
+
+setInterval(updateSensors,3000);
+
+</script>
+
+</body>
+</html>
